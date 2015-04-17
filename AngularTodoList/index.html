@@ -5,10 +5,19 @@
     <title>Todo List</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <!--
-    <style type="text/css">
-    </style>
--->
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--script type="text/javascript">
+        $("input").focus(function () {
+            alert("Handler for .focus() called.");
+        });
+
+        $(document).ready(function () {
+            $("button").click(function () {
+                console.log("button clicked");
+            });
+        });
+    </script-->
 </head>
 
 <body ng-controller="TodoController as todoCtrl">
@@ -17,9 +26,9 @@
     <form>
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group ">
+                <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="New Todo ..." ng-model="todoCtrl.currentSummary">
+                        <input type="text" class="form-control" placeholder="New Todo ..." ng-model="todoCtrl.summary">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="todoCtrl.addTodo()">Add!</button>
                         </span>
@@ -29,36 +38,28 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <textarea class="form-control" rows="2" ng-model="todoCtrl.currentDescription"></textarea>
+                <textarea class="form-control" placeholder="New Description ..." rows="2" ng-model="todoCtrl.description"></textarea>
             </div>
         </div>
     </form>
-    <div class="row">
-        <div class="col-md-6">
-            <div ng-repeat="todo in todoCtrl.todos">
-                <!--            <label>-->
-                <div class="form-group">
-                    <!-- <input type="radio" name="todo"value="{{todo.id}}">-->
-                    <button type="button" ng-click="todoCtrl.setCurrentTodo($index)" class="btn btn-default btn-sm btn-block">{{todo.summary}}</button>
-                    <!--            </label>-->
+
+    <div ng-repeat="todo in todoCtrl.todos">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                                <input type="radio" value="{{todo.id}}" name="todoRadio" aria-label="..." 
+                                       ng-click="todoCtrl.setCurrentTodo($index)" select-input-on-click>
+                     </span>
+                    <input type="text" readonly="readonly" ng-click="todoCtrl.setCurrentTodo($index)" class="form-control btm-sm" aria-label="..." value="{{todo.summary}}" select-radio-on-click>
                 </div>
             </div>
         </div>
     </div>
-    <!--
-            <section class="tab">
-                <ul >
-                    <li ng-repeat="todo in todoCtrl.todos" role="presentation">
-                         <input type="radio">
-                        <a href ng-click="todoCtrl.setCurrentTodo($index)">{{todo.summary}}</a>
-                    </li>
-                </ul>
-            </section>
-            -->
 
 
-    <button type="button" class="btn btn-primary" ng-show="!todoCtrl.product.done">edit</button>
-    <button type="button" class="btn btn-primary" ng-show="!todoCtrl.product.done" ng-click="todoCtrl.deleteTodo()">delete</button>
+    <button type="button" class="btn btn-primary" ng-show="!todoCtrl.product.done">save</button>
+    <button type="button" class="btn btn-primary" ng-show="!todoCtrl.product.done" ng-click="todoCtrl.deleteTodo($index)">delete</button>
 
     <div>
         <h4>details</h4> {{todoCtrl.currentTodo.description}}

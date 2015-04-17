@@ -13,24 +13,34 @@
                ]
 
     var app = angular.module('todoApp', []);
+
+    app.controller('TodoItemController', function () {
+
+
+    });
+
     app.controller('TodoController', function () {
 
         this.todos = todos;
 
-        this.currentSummary = '';
-        this.currentDescription = '';
+        this.summary = '';
+        this.description = '';
+
 
         this.setCurrentTodo = function (index) {
             this.currentTodo = this.todos[index];
+            this.summary = this.currentTodo.summary;
+            this.description = this.currentTodo.description;
         }
 
         this.addTodo = function () {
             this.todos.push({
                 id: this.todos.length,
-                summary: this.currentSummary,
-                description: this.currentDescription
+                summary: this.summary,
+                description: this.description
             });
-            this.currentSummary = '';
+            this.summary = '';
+            this.description = '';
         }
 
         this.deleteTodo = function () {
@@ -41,6 +51,30 @@
                 }
             }
         }
+
+        this.updateTodo = function (index) {
+            var todo = this.todos[index];
+            todo.summary = "x";
+            todo.description = "y";
+        }
+    });
+
+    app.directive('selectRadioOnClick', function () {
+        // Linker function
+        return function (scope, element, attrs) {
+            element.bind("click", function () {
+                $(this).prev().children(':radio').click();
+            });
+        };
+    });
+
+    app.directive('selectInputOnClick', function () {
+        // Linker function
+        return function (scope, element, attrs) {
+            element.bind("click", function () {
+                $(this).parent().next('input').focus();
+            });
+        };
     });
 
 })();
