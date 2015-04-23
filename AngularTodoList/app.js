@@ -22,40 +22,51 @@
     app.controller('TodoController', function () {
 
         this.todos = todos;
+        this.currentTodo;
 
         this.summary = '';
         this.description = '';
 
 
         this.setCurrentTodo = function (index) {
+            console.log(index);
             this.currentTodo = this.todos[index];
             this.summary = this.currentTodo.summary;
             this.description = this.currentTodo.description;
         }
 
         this.addTodo = function () {
-            this.todos.push({
-                id: this.todos.length,
-                summary: this.summary,
-                description: this.description
-            });
-            this.summary = '';
-            this.description = '';
+            if (this.currentTodo !== undefined) {
+                this.currentTodo.description = this.description;
+                this.currentTodo.summary = this.summary;
+            } else {
+                this.todos.push({
+                    id: this.todos.length + 1,
+                    summary: this.summary,
+                    description: this.description
+                });
+                this.clearFields();
+            }
         }
 
         this.deleteTodo = function () {
             for (i = 0; i < this.todos.length; i++) {
-                if (this.currentTodo == this.todos[i]) {
+                if (this.currentTodo === this.todos[i]) {
                     this.todos.splice(i, 1);
+                    this.clearFields();
                     return;
                 }
             }
         }
 
-        this.updateTodo = function (index) {
-            var todo = this.todos[index];
-            todo.summary = "x";
-            todo.description = "y";
+        this.newTodo = function () {
+            this.clearFields();
+        };
+
+        this.clearFields = function () {
+            this.summary = '';
+            this.description = '';
+            this.currentTodo = undefined;
         }
     });
 
@@ -63,7 +74,7 @@
         // Linker function
         return function (scope, element, attrs) {
             element.bind("click", function () {
-                $(this).prev().children(':radio').click();
+                element.parent().find("input")[0].click();
             });
         };
     });
@@ -72,7 +83,8 @@
         // Linker function
         return function (scope, element, attrs) {
             element.bind("click", function () {
-                $(this).parent().next('input').focus();
+                console.log(element.parent().next());
+                element.parent().next()[0].focus();
             });
         };
     });
